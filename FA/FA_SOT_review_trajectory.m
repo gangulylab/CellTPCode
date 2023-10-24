@@ -87,33 +87,4 @@ tmp_plt_sel_thy1 = 3;
 tmp_rtate_TP = 0;
 tmp_rtate_thy1 = 0;
 
-figure
-
-tmp_MFA_TP_score = FA.F{tmp_plt_sel_TP};
-tmp_MFA_thy1_score = FA_thy1.F{tmp_plt_sel_thy1};
-
-if tmp_rtate_TP == 1
-    tmp_idx = sort(1:size(tmp_MFA_TP_score,2),'descend');
-    tmp_MFA_TP_score = tmp_MFA_TP_score(:,tmp_idx);
-end
-if tmp_rtate_thy1 == 1
-    tmp_idx = sort(1:size(tmp_MFA_thy1_score,2),'descend');
-    tmp_MFA_thy1_score = tmp_MFA_thy1_score(:,tmp_idx);
-end
-
-for s = 1:size(FA.F,2)
-    tmp_score = FA.F{tmp_plt_sel_TP,s};
-    out = plt_traj(tmp_score,50);
-    hold on
-
-end
-
-for s = 1
-    tmp_score = tmp_MFA_thy1_score;
-    out = plt_traj(tmp_score,50);
-    hold on
-
-end
-
-%% 
 
