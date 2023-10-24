@@ -81,10 +81,4 @@ end
 set(gcf,'color','w');
 
 
-tmp_plt_sel_TP = 6;
-tmp_plt_sel_thy1 = 3;
-% rotate control
-tmp_rtate_TP = 0;
-tmp_rtate_thy1 = 0;
-
 
