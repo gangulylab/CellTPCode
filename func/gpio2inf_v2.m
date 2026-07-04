@@ -1,19 +1,13 @@
-function GPIO_inf = gpio2inf(pfile,type_str, pulse_train)
-% to get video start information from GPIO
-% file for GPIO file '.csv'
-% type_str for the variable name in the GPIO file for example 'GPIO-1'
-% pulse_train will be removed soon since no more pulse train used
-    
-    
-%     pfile = [fpath GPIO_file];
-%     type_str = 'GPIO-1';
+function GPIO_inf = gpio2inf_v2(pfile,type_str, pulse_train)
+% Earlier GPIO event extractor (kept for the pulse_train == 1 path).
+%   pfile      - path to the GPIO '.csv' file
+%   type_str   - channel name in the file, e.g. 'GPIO-1'
+%   pulse_train - 1 uses the pulse-train detector, otherwise the oversampled bin detector
     GPIOload = readtable(pfile);
 
     %% extract GPIO1 (trigger signal) from CSV file
     temp_lb = find(strcmp(GPIOload{:, 2}, type_str));
     GPIO1 = [table2array(GPIOload(temp_lb,1)) table2array(GPIOload(temp_lb,3))];
-    %low to high
-    % GPIO1(:,2) = abs(GPIO1(:,2)-repmat(max(GPIO1(:,2)),size(GPIO1,1),1));
 
     if pulse_train == 1
         max_dist = 40;
@@ -84,7 +78,7 @@ function GPIO_inf = gpio2inf(pfile,type_str, pulse_train)
         t_end = max(GPIO_tmp(:,1));
         nt = 0:1/fs:t_end-1/fs;%over sampled time
         for i = 1:size(GPIO_tmp,1)
-            [c1 index1] = min(abs(nt-GPIO_tmp(i,1)));
+            [~, index1] = min(abs(nt-GPIO_tmp(i,1)));
             t_idx_overs(i) = index1;
         end
         GPIO1 = nt';

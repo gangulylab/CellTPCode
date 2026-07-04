@@ -1,7 +1,12 @@
-%% blood flow speed analysis manual
+%% Blood flow speed analysis (single file, interactive)
+% Manual/interactive version of BF_group_load: prompts for a TIFF stack, loads a
+% time window, builds the vessel mask, and estimates local flow speed from the
+% cross-correlation lag between nearby pixels, averaged over it_cplot runs.
 clear all
 close all
 %% parameters
+% Point data_root at the folder where you downloaded the dataset.
+data_root = 'Transplant_Data';   % <-- set this to your data folder
 % lo_sepa = 10;  % data load section division level
 fs = 60;
 lo_t = [20 23]; %time from to in the data
@@ -53,7 +58,7 @@ t = 0:1/fs:size(tiff_data,3)/fs-1/fs;
 % imagesc(ca_max_fil)
 
 
-t = Tiff('C:\Users\chopa\Box\Transplant_Data\Blood Flow\M98\M98_bf_edited.tif','r');
+t = Tiff(fullfile(data_root, 'Blood Flow', 'M98', 'M98_bf_edited.tif'),'r');
 ca_max = read(t);
 ca_max = squeeze(mean(ca_max,3));
 figure

@@ -1,22 +1,22 @@
 function out = ring_lattice_v2(A, mod_idx)
-
+% Circular connectivity graph with edge width scaled by connection strength
+% (A(i,j)*3) and modulated nodes drawn filled. Returns 1/0 on success/failure.
     mod_n = find(mod_idx == 1);
     try
-    %# 60-by-60 sparse adjacency matrix
     N = length(A);
 
-    %# x/y coordinates of nodes in a circular layout
+    % Circular node coordinates
     r =  1;
     theta = linspace(0,2*pi,N+1)'; theta(end) = [];
     xy = r .* [cos(theta) sin(theta)];
 
-    %# show nodes and edges
+    % Nodes
     line(xy(:,1), xy(:,2), 'LineStyle','none', ...
         'Marker','.', 'MarkerSize',15, 'Color','blue')
     hold on
     scatter(xy(mod_n,1), xy(mod_n,2), 'filled')
-    
-    %# show nodes and edges
+
+    % Weighted edges
     for i = 1:size(A,1)
         for j = 1:size(A,2)
             if A(i,j)>0

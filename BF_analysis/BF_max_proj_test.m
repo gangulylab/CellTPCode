@@ -1,5 +1,9 @@
+% Scratch script for tuning the blood-flow vessel mask: compares mean/median/
+% convolution filtering and thresholding of a max-projection TIFF.
 %% load tiff file
-t = Tiff('C:\Users\chopa\Box\Transplant_Data\Blood Flow\M98\M98_bf_edited.tif','r');
+% Point data_root at the folder where you downloaded the dataset.
+data_root = 'Transplant_Data';   % <-- set this to your data folder
+t = Tiff(fullfile(data_root, 'Blood Flow', 'M98', 'M98_bf_edited.tif'),'r');
 ca_max = read(t);
 ca_max = squeeze(mean(ca_max,3));
 figure
@@ -36,8 +40,6 @@ imagesc(ca_max2)
 
 
 median_ca(find(ca_max < thres*v_max)) = 0;
-
--
 
 conv_ca_max = conv2(ca_max,filt1);
 conv_ca_max(find(conv_ca_max < thres*v_max)) = 0;

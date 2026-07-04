@@ -1,7 +1,10 @@
-% foname = 'C:\Users\Kyungsoo Kim\Box\Transplant_Data\Blood Flow\save_mat\';
-foname = 'C:\Users\chopa\Box\Transplant_Data\Blood Flow\save_mat\';
+% Render a blood-flow movie: load a raw TIFF stack, compute a moving-window
+% temporal std (movstd) to highlight flow, preview it, and write BF_mov.avi.
+% Point data_root at the folder where you downloaded the dataset.
+data_root = 'Transplant_Data';   % <-- set this to your data folder
+foname = fullfile(data_root, 'Blood Flow', 'save_mat');
 finame = 'M150.mat';
-load([foname finame]);
+load(fullfile(foname, finame));
 
 
 plt_offset = 400;

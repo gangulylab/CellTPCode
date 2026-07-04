@@ -1,16 +1,17 @@
 function out = ring_lattice_add_line(A, mod_idx,rt_col)
-
+% Overlay only the edges of adjacency matrix A onto an existing circular node
+% layout (color rt_col), without redrawing the nodes. Returns 1/0 on
+% success/failure.
     mod_n = find(mod_idx == 1);
     try
-    %# 60-by-60 sparse adjacency matrix
     N = length(A);
 
-    %# x/y coordinates of nodes in a circular layout
+    % Circular node coordinates
     r =  1;
     theta = linspace(0,2*pi,N+1)'; theta(end) = [];
     xy = r .* [cos(theta) sin(theta)];
 
-    %# show nodes and edges
+    % Draw an edge for every nonzero entry of A
     for i = 1:size(A,1)
         for j = 1:size(A,2)
             if A(i,j)>0

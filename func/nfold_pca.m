@@ -1,5 +1,8 @@
 function out = nfold_pca(Mdata,sample_pca)
-fold = 2;
+% 2-fold cross-validated PCA of session-mean reaching activity.
+% Like loov_pca but splits trials into `fold` contiguous blocks instead of
+% leaving out one trial at a time.
+    fold = 2;
     for m = 1:size(Mdata,2)
         tmp_Mdata = Mdata{m};
         clear ca2data_reaching Mpca

@@ -1,12 +1,12 @@
 function GPIO_inf = gpio2inf_v3(pfile,type_str, plot_on)
-% to get video start information from GPIO
-% file for GPIO file '.csv'
-% type_str for the variable name in the GPIO file for example 'GPIO-1'
-% pulse_train will be removed soon since no more pulse train used
+% Extract event times from a GPIO trigger channel in a CSV file.
+%   pfile    - path to the GPIO '.csv' file
+%   type_str - channel name in the file, e.g. 'GPIO-1'
+%   plot_on  - set to 1 to show diagnostic plots
+% Events are classified into touch/start/end by pulse duration (t_ref).
+% See gpio2inf_v4 for a version that also removes repeated pulses.
     t_ref = [0.01 0.03 0.07];
-    
-%     pfile = [fpath GPIO_file];
-%     type_str = 'GPIO-1';
+
     GPIOload = readtable(pfile);
 
     %% extract GPIO1 (trigger signal) from CSV file
@@ -49,15 +49,12 @@ function GPIO_inf = gpio2inf_v3(pfile,type_str, plot_on)
         
     end
     
-    % to return
+    % Return event times
     GPIO_inf.touch = r_time(GPIO_pt,1);
     GPIO_inf.start = r_time(GPIO_st,1);
-    GPIO_inf.end = r_time(GPIO_end,1);
-    
-    
-    
-    
-    %plot
+    GPIO_inf.end   = r_time(GPIO_end,1);
+
+    % Diagnostic plots
     if plot_on == 1
 
         figure
@@ -70,9 +67,4 @@ function GPIO_inf = gpio2inf_v3(pfile,type_str, plot_on)
         figure
         histogram(t_dur,100);
     end
-    
-
-
 end
-
-

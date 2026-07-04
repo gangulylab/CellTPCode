@@ -1,21 +1,28 @@
+% Factor analysis of session-mean reaching activity.
+% Estimates "shared over total" variance (SOT = mean(1 - psi)) per session for
+% the transplant and thy1 groups, and plots the factor score trajectories.
+% When factoran fails (non-positive-definite covariance), it falls back to
+% rnd_FA_mean on a random subset of cells, so results may vary slightly per run.
+
 clear FA*
 n_fa = 2;
+
+% Transplant group
 for m = 1:size(Mdata,2)
     tmp_Mdata = Mdata{m};
-    
     for s = 1:size(tmp_Mdata.ca2data_reaching,2)
-        tmp_mod_bi = tmp_Mdata.mod_pt_do{s};
-        tmp_idx = find(tmp_mod_bi == 1);
+        tmp_mod_bi  = tmp_Mdata.mod_pt_do{s};
+        tmp_idx     = find(tmp_mod_bi == 1);
         tmp_fa_mean = squeeze(mean(tmp_Mdata.ca2data_reaching{s}));
         tmp_psi = 0;
-        try [FA.lambda{m,s},tmp_psi,tmp_T,tmp_stats,FA.F{m,s}] = factoran(transpose(tmp_fa_mean),n_fa);
+        try
+            [FA.lambda{m,s},tmp_psi,tmp_T,tmp_stats,FA.F{m,s}] = factoran(transpose(tmp_fa_mean),n_fa);
             tmp_sot(m,s) = mean(1-tmp_psi);
         catch
             dim_in = 80;
             [FA.lambda{m,s},tmp_psi,tmp_T,tmp_stats,FA.F{m,s}] = rnd_FA_mean(transpose(tmp_fa_mean),n_fa,dim_in);
             tmp_sot(m,s) = mean(1-tmp_psi);
         end
-        
     end
 end
 figure
@@ -23,33 +30,33 @@ out = plt_ebar(tmp_sot);
 set(gcf,'color','w');
 title('transplanted sot')
 
+% Thy1 healthy group
 for m = 1:size(Mdata_thy1,2)
     tmp_Mdata = Mdata_thy1{m};
-    
     for s = 1:size(tmp_Mdata.ca2data_reaching,2)
-        tmp_mod_bi = tmp_Mdata.mod_pt_do{s};
-        tmp_idx = find(tmp_mod_bi == 1);
+        tmp_mod_bi  = tmp_Mdata.mod_pt_do{s};
+        tmp_idx     = find(tmp_mod_bi == 1);
         tmp_fa_mean = squeeze(mean(tmp_Mdata.ca2data_reaching{s}));
         tmp_psi = 0;
-        try [FA_thy1.lambda{m,s},tmp_psi,tmp_T,tmp_stats,FA_thy1.F{m,s}] = factoran(transpose(tmp_fa_mean),n_fa);
+        try
+            [FA_thy1.lambda{m,s},tmp_psi,tmp_T,tmp_stats,FA_thy1.F{m,s}] = factoran(transpose(tmp_fa_mean),n_fa);
             tmp_sot_thy1(m,s) = mean(1-tmp_psi);
         catch
             dim_in = 80;
             [FA_thy1.lambda{m,s},tmp_psi,tmp_T,tmp_stats,FA_thy1.F{m,s}] = rnd_FA_mean(transpose(tmp_fa_mean),n_fa,dim_in);
             tmp_sot_thy1(m,s) = mean(1-tmp_psi);
         end
-        
     end
 end
 
-
+% Thy1: factor score trajectories, with per-session RMS loadings
 k = 0;
 figure
 for m = 1:size(FA_thy1.F,1)
     for s = 1:size(FA_thy1.F,2)
         k = k+1;
         subplot(size(FA_thy1.F,1),size(FA_thy1.F,2),k)
-        tmp_lambda = FA_thy1.lambda{m,s};
+        tmp_lambda   = FA_thy1.lambda{m,s};
         tmp_lambda_p = sqrt(tmp_lambda'*tmp_lambda/size(tmp_lambda,1));
         tmp_rms_lambda = diag(tmp_lambda_p)';
         FA_thy1.rms_L{m,s} = tmp_rms_lambda;
@@ -64,21 +71,15 @@ out = plt_ebar(tmp_sot_thy1);
 set(gcf,'color','w');
 title('Healthy sot')
 
-%since the positive definite matrix issue, random selelction of cell
-%performed, the result may changed slightly each performance
-
+% Thy1: factor score trajectories without y-limit
 k = 0;
 figure
 for m = 1:size(FA_thy1.F,1)
     for s = 1:size(FA_thy1.F,2)
         k = k+1;
         subplot(size(FA_thy1.F,1),size(FA_thy1.F,2),k)
-
-            tmp_plt = FA_thy1.F{m,s};
-            plot(t_dpoint,tmp_plt)
+        tmp_plt = FA_thy1.F{m,s};
+        plot(t_dpoint,tmp_plt)
     end
 end
 set(gcf,'color','w');
-
-
-

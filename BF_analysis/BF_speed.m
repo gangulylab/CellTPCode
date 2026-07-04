@@ -1,3 +1,6 @@
+% Collect nonzero blood-flow speed values from each animal's mean speed map
+% (Mbf, produced by BF_group_load) and compare their distributions with
+% raincloud plots. Requires the raincloud_plot toolbox on the path.
 
 tmp_acc = [];
 for m = 1:size(Mbf,2)

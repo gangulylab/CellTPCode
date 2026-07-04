@@ -1,3 +1,9 @@
+% Blood-flow speed estimation across animals.
+% For each animal: load the vessel max-projection, threshold it into a mask,
+% then repeatedly drop a random "agent" square on the mask and estimate local
+% flow speed from the cross-correlation lag between nearby pixel time series
+% (speed = distance / lag). Averages it_cplot runs into a per-animal speed map
+% (Mbf{m}.flow_speed_map_mean) and compares the speed distributions.
 clear all
 close all
 %% parameters
@@ -12,11 +18,13 @@ it_cplot = 50;   % number of averages
 % mname = {'M98','M107','M118','M150'};
 mname = {'M98','M107','M150'};
 % mname = {'M98','M107','M118'};
-foname = 'C:\Users\chopa\Box\Transplant_Data\Blood Flow\';
+% Point data_root at the folder where you downloaded the dataset.
+data_root = 'Transplant_Data';   % <-- set this to your data folder
+foname = fullfile(data_root, 'Blood Flow');
 
 
 for m = 1:size(mname,2)
-    t = Tiff([foname 'max_projection\' mname{m} '_BF_edited.tif'],'r');%load max projection
+    t = Tiff(fullfile(foname, 'max_projection', [mname{m} '_BF_edited.tif']),'r');%load max projection
     ca_max = read(t);
     ca_max = squeeze(mean(ca_max,3))/double(max(ca_max,[],'all'));
     Mbf{m}.maxP = ca_max;
@@ -52,7 +60,7 @@ for m = 1:size(mname,2)
     figure
     imagesc(ca_max_fil)
     Mbf{m}.maxP_fil = ca_max_fil;
-    load([foname 'save_mat\' mname{m} '.mat']);
+    load(fullfile(foname, 'save_mat', [mname{m} '.mat']));
     tiff_data = tiff_data(:,:,t_cut(1):t_cut(2));
     for q = 1:it_cplot
         % ca_max_update make and remove out bound

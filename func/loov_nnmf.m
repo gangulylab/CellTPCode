@@ -1,5 +1,8 @@
 function out = loov_nnmf(Mdata,sample_pca)
-fold = 5;
+% 5-fold cross-validated NNMF of session-mean reaching activity.
+% For each held-out fold, factorize the training mean over the sample_pca
+% window and project the held-out fold onto the learned components (LOOV).
+    fold = 5;
     for m = 1:size(Mdata,2)
         tmp_Mdata = Mdata{m};
         clear ca2data_reaching Mnnmf

@@ -1,9 +1,10 @@
 function out = plt_cell_loc(Mdata,plt_m)
-% um conversion
-um_x = 950/1280;
-um_y = 600/800;
-um_avr = mean([um_x um_y]);
-
+% Scatter cell locations (microns) for every animal/session, coloring modulated
+% cells filled and non-modulated cells open. A second figure zooms in on the
+% animal given by plt_m.
+    um_x   = 950/1280;
+    um_y   = 600/800;
+    um_avr = mean([um_x um_y]);
 
     figure
     k = 0;

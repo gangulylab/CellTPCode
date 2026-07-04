@@ -1,4 +1,7 @@
 function out = loov_pca(Mdata,sample_pca)
+% Leave-one-out PCA of session-mean reaching activity.
+% For each held-out trial, run PCA on the mean of the remaining trials over the
+% sample_pca window and project the held-out trial onto the components (LOOV).
     for m = 1:size(Mdata,2)
         tmp_Mdata = Mdata{m};
         clear ca2data_reaching Mpca

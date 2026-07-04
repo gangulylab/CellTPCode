@@ -1,23 +1,30 @@
-%%load cell cent
+% Distance from each cell centroid to the nearest thresholded blood-flow pixel.
+% Loads cell centroids (pickle .mat) and a blood-flow max-projection TIFF,
+% thresholds the vessel mask, computes each cell's minimum distance to the mask
+% (converted to microns), and plots the distance distribution.
 clear all
 close all
 
-um_x = 950/1280;
-um_y = 600/800;
+um_x   = 950/1280;
+um_y   = 600/800;
 um_avr = mean([um_x um_y]);
+
+% Point data_root at the folder where you downloaded the dataset.
+data_root = 'Transplant_Data';   % <-- set this to your data folder
+
 %M98
-foname = 'C:\Users\chopa\Box\Transplant_Data\Caiman\Behavior\M98_syn\mat\';
+foname = fullfile(data_root, 'Caiman', 'Behavior', 'M98_syn', 'mat');
 finamePickle = '2021-12-02_pickle.mat';
 
-% foname = 'C:\Users\Kyungsoo Kim\Box\Transplant_Data\Caiman\Behavior\M150_syn\mat_ext\';
+% foname = fullfile(data_root, 'Caiman', 'Behavior', 'M150_syn', 'mat_ext');
 % finamePickle = '2022-06-24_pickle.mat';
 
-tmp_load = load([foname finamePickle]);
+tmp_load = load(fullfile(foname, finamePickle));
 cent = tmp_load.cnm_pickle.coms;
 
 %% load tif max image
-t = Tiff('C:\Users\Kyungsoo Kim\\Box\Transplant_Data\Blood Flow\M98\M98_bf_edited.tif','r'); %m98
-% t = Tiff('C:\Users\Kyungsoo Kim\Box\Transplant_Data\Blood Flow\max projection\M150_bf.tiff','r');
+t = Tiff(fullfile(data_root, 'Blood Flow', 'M98', 'M98_bf_edited.tif'),'r'); %m98
+% t = Tiff(fullfile(data_root, 'Blood Flow', 'max projection', 'M150_bf.tiff'),'r');
 ca_max = read(t);
 ca_max = squeeze(mean(ca_max,3));
 v_max = max(ca_max,[],'all');

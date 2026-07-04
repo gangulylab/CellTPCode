@@ -1,12 +1,13 @@
-function out = loov_pca(Mdata,sample_pca)
+function out = loov_pca_mod(Mdata,sample_pca)
+% Leave-one-out PCA restricted to modulated cells only.
+% Same as loov_pca but drops non-modulated cells before running pca.
     for m = 1:size(Mdata,2)
         tmp_Mdata = Mdata{m};
         clear ca2data_reaching Mpca
         ca2data_reaching = tmp_Mdata.ca2data_reaching;
-        
+
         for s = 1:size(tmp_Mdata.ca2data_reaching,2)
             tmp_mod_all = tmp_Mdata.mod_pt_do{s};
-    
             tmp_mod_all(find(tmp_mod_all > 0)) = 1;
             tmp_dl = size(ca2data_reaching{s},1);
             for kf = 1:tmp_dl

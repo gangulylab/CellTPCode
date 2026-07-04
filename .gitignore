@@ -1,0 +1,12 @@
+# MATLAB autosave / editor backups
+*.asv
+*.m~
+
+# MATLAB compiled / cache
+*.mex*
+*.slxc
+slprj/
+
+# OS files
+.DS_Store
+Thumbs.db

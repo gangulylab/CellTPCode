@@ -1,3 +1,6 @@
+% Pool per-animal "minimum distance from the branch/bifurcation" (cent_min_dist)
+% across animals and show the distribution as a histogram and raincloud plots.
+% Requires the raincloud_plot toolbox on the path.
 clear all
 close all
 

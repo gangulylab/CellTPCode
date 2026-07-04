@@ -1,11 +1,14 @@
-function [out signif h mean_mat] = mod_kk_anova_v1(x_in,bin_s,signf_v)
+function [out, signif, h, mean_mat] = mod_kk_anova_v1(x_in,bin_s,signf_v)
+% Per-cell one-way ANOVA across binned time, with Bonferroni post-hoc tests.
+% Returns pairwise p-values (out), a per-cell significance flag (signif),
+% the pairwise hypothesis matrix (h), and the binned means (mean_mat).
 
     for c = 1:size(x_in,2)
         ca2data = squeeze(x_in(:,c,:));
-%         ca2data = zscore(ca2data,[],2);
-        %bin average
+%         ca2data = zscore(ca2data,[],2);   % optional: z-score per trial
+        % bin average
         tmp_re_mean = [];
-        
+
         for i = 1:size(ca2data,1)
             tmp_ca2data = ca2data(i,1:floor(size(ca2data,2)/bin_s)*bin_s);
             tmp_re_ca2data = reshape(tmp_ca2data,bin_s,floor(size(ca2data,2)/bin_s));
